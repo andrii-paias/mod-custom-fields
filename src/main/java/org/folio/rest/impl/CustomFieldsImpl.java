@@ -87,4 +87,11 @@ public class CustomFieldsImpl implements CustomFields {
     Future<Void> updated = customFieldsService.update(id, entity, new OkapiParams(okapiHeaders));
     respond(updated, v -> PutCustomFieldsByIdResponse.respond204(), asyncResultHandler, excHandler);
   }
+
+  @Override
+  @Validate
+  public void getCustomFieldsStatsById(String id, String lang, Map<String, String> okapiHeaders, Handler<AsyncResult<Response>> asyncResultHandler, Context vertxContext) {
+    asyncResultHandler.handle(Future.succeededFuture(
+      GetCustomFieldsStatsByIdResponse.respond500WithTextPlain("Not supported")));
+  }
 }
