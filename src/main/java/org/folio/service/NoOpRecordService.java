@@ -9,7 +9,7 @@ import io.vertx.core.Future;
 import org.folio.rest.jaxrs.model.CustomField;
 import org.folio.rest.jaxrs.model.CustomFieldStatisticCollection;
 
-public final class NoOpRecordConnectorService implements RecordConnectorService {
+public final class NoOpRecordService implements RecordService {
 
   @Override
   public Future<CustomFieldStatisticCollection> retrieveStatistic(CustomField field, String tenantId) {

@@ -27,9 +27,9 @@ import org.springframework.core.io.ClassPathResource;
 import org.folio.common.pf.PartialFunction;
 import org.folio.db.exc.translation.DBExceptionTranslator;
 import org.folio.db.exc.translation.DBExceptionTranslatorFactory;
-import org.folio.service.NoOpRecordConnectorService;
-import org.folio.service.RecordConnectorService;
-import org.folio.service.spi.RecordConnectorFactory;
+import org.folio.service.NoOpRecordService;
+import org.folio.service.RecordService;
+import org.folio.service.spi.RecordServiceFactory;
 
 @Configuration
 @ComponentScan(basePackages = {
@@ -64,27 +64,27 @@ public class ApplicationConfig {
   }
 
   @Bean
-  public RecordConnectorService recordConnector(Vertx vertx) {
-    RecordConnectorService rc;
+  public RecordService recordService(Vertx vertx) {
+    RecordService rc;
 
-    Collection<RecordConnectorFactory> factories = ServiceHelper.loadFactories(RecordConnectorFactory.class);
+    Collection<RecordServiceFactory> factories = ServiceHelper.loadFactories(RecordServiceFactory.class);
 
     if (CollectionUtils.isEmpty(factories)) {
-      rc = new NoOpRecordConnectorService();
+      rc = new NoOpRecordService();
 
       // log warning: No concrete implementation !!
       logger.warn("No implementation of {} service provider interface found in the classpath. " +
           "Check that the correct implementation class is set in META-INF/services/{} configuration file",
           "The default No-op service will be used instead: some functions might not work properly!" +
-          RecordConnectorFactory.class, RecordConnectorFactory.class, rc.getClass());
+          RecordServiceFactory.class, RecordServiceFactory.class, rc.getClass());
     } else {
-      RecordConnectorFactory factory = factories.iterator().next();
+      RecordServiceFactory factory = factories.iterator().next();
       rc = factory.create(vertx);
 
       if (factories.size() > 1) {
         // log warning: too many implementations
         logger.warn("Too many implementations of {} service provider interface found. The first one will be used: {}",
-          RecordConnectorFactory.class, rc.getClass());
+          RecordServiceFactory.class, rc.getClass());
       }
     }
 

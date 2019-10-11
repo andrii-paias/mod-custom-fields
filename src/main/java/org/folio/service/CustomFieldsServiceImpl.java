@@ -24,7 +24,7 @@ public class CustomFieldsServiceImpl implements CustomFieldsService {
   @Autowired
   private UserService userService;
   @Autowired
-  private RecordConnectorService recordConnector;
+  private RecordService recordService;
 
   @Override
   public Future<CustomField> save(CustomField customField, OkapiParams params) {
@@ -67,7 +67,7 @@ public class CustomFieldsServiceImpl implements CustomFieldsService {
     Future<CustomField> cf = findById(id, tenantId);
 
     return cf
-      .compose(field -> recordConnector.deleteAllValues(field, tenantId))
+      .compose(field -> recordService.deleteAllValues(field, tenantId))
       .compose(v -> repository.delete(id, tenantId))
       .compose(deleted -> failIfNotFound(deleted, id));
   }
@@ -75,7 +75,7 @@ public class CustomFieldsServiceImpl implements CustomFieldsService {
   @Override
   public Future<CustomFieldStatisticCollection> retrieveStatistic(String id, String tenantId) {
     return findById(id, tenantId)
-      .compose(field -> recordConnector.retrieveStatistic(field, tenantId));
+      .compose(field -> recordService.retrieveStatistic(field, tenantId));
   }
 
   private Future<Void> failIfNotFound(boolean found, String entityId) {
