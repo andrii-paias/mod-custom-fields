@@ -73,10 +73,10 @@ public class ApplicationConfig {
       rc = new NoOpRecordService();
 
       // log warning: No concrete implementation !!
-      logger.warn("No implementation of {} service provider interface found in the classpath. " +
-          "Check that the correct implementation class is set in META-INF/services/{} configuration file",
-          "The default No-op service will be used instead: some functions might not work properly!" +
-          RecordServiceFactory.class, RecordServiceFactory.class, rc.getClass());
+      logger.warn("No implementation of {} service provider interface found in the classpath.\n" +
+          "Check that the correct implementation class is set in META-INF/services/{} configuration file.\n" +
+          "The default No-op service will be used instead: some functions might not work properly!",
+          RecordServiceFactory.class.getName(), RecordServiceFactory.class.getName());
     } else {
       RecordServiceFactory factory = factories.iterator().next();
       rc = factory.create(vertx);
@@ -84,7 +84,7 @@ public class ApplicationConfig {
       if (factories.size() > 1) {
         // log warning: too many implementations
         logger.warn("Too many implementations of {} service provider interface found. The first one will be used: {}",
-          RecordServiceFactory.class, rc.getClass());
+          RecordServiceFactory.class.getName(), rc.getClass().getName());
       }
     }
 
